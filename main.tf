@@ -75,8 +75,8 @@ resource "aws_security_group" "ssh-allowed" {
         cidr_blocks = ["0.0.0.0/0"]
     }
     ingress {
-        from_port = 22
-        to_port = 22
+        from_port = 80
+        to_port = 80
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
@@ -89,6 +89,16 @@ resource "aws_instance" "test_instance" {
     subnet_id = aws_subnet.test_subnet.id
     vpc_security_group_ids= [aws_security_group.ssh-allowed.id]
 }
+
+resource "aws_eip" "eip" {
+  vpc = true
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.test_instance.id
+  allocation_id = aws_eip.eip.id
+}
+
 
 resource "aws_ebs_volume" "test_ebs" {
     availability_zone = "eu-west-2b"
