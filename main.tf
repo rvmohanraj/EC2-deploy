@@ -21,6 +21,7 @@ terraform {
 
 data "aws_ami" "filter" {
   most_recent = true
+  owners = ["self"]
   tags = {
        Name = "ami-app"
  }
